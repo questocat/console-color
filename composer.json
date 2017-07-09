@@ -1,0 +1,34 @@
+{
+    "name": "emanci/console-color",
+    "description": "",
+    "keywords": ["console", "color", "console-color", "bash", "cli"],
+    "license": "MIT",
+    "minimum-stability": "dev",
+    "authors": [{
+        "name": "emanci",
+        "email": "zhengchaopu@gmail.com"
+    }],
+    "require": {
+        "php": ">=5.5.0"
+    },
+    "require-dev": {
+        "mockery/mockery": "~0.9",
+        "phpunit/phpunit": "~4.0|~5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Emanci\\ConsoleColor\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "repositories": {
+        "packagist": {
+            "type": "composer",
+            "url": "https://packagist.phpcomposer.com"
+        }
+    }
+}

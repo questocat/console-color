@@ -1,12 +1,49 @@
 <?php
-/**
- * @author: emanci <zhengchaopu@gmail.com>
- *
- * @copyright 2017 moerlong.com
- */
 
 namespace Emanci\ConsoleColor;
 
+/**
+ * @method mixed default()
+ * @method mixed black()
+ * @method mixed red()
+ * @method mixed green()
+ * @method mixed yellow()
+ * @method mixed blue()
+ * @method mixed magenta()
+ * @method mixed cyan()
+ * @method mixed lightGray()
+ * @method mixed darkGray()
+ * @method mixed lightRed()
+ * @method mixed lightGreen()
+ * @method mixed lightYellow()
+ * @method mixed lightBlue()
+ * @method mixed lightMagenta()
+ * @method mixed lightCyan()
+ * @method mixed white()
+ * @method mixed defaultBackground()
+ * @method mixed blackBackground()
+ * @method mixed redBackground()
+ * @method mixed Background()
+ * @method mixed greenBackground()
+ * @method mixed yellowBackground()
+ * @method mixed blueBackground()
+ * @method mixed magentaBackground()
+ * @method mixed cyanlightGrayBackground()
+ * @method mixed darkGrayBackground()
+ * @method mixed lightRedBackground()
+ * @method mixed lightGreenBackground()
+ * @method mixed lightYellowBackground()
+ * @method mixed lightBlueBackground()
+ * @method mixed lightMagentaBackground()
+ * @method mixed lightCyanBackground()
+ * @method mixed whiteBackground()
+ * @method mixed bold()
+ * @method mixed dim()
+ * @method mixed underline()
+ * @method mixed blink()
+ * @method mixed invert()
+ * @method mixed hidden()
+ */
 class ConsoleColor
 {
     /**

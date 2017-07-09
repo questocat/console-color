@@ -1,9 +1,4 @@
 <?php
-/**
- * @author: emanci <zhengchaopu@gmail.com>
- *
- * @copyright 2017 moerlong.com
- */
 
 namespace Emanci\ConsoleColor;
 
@@ -109,11 +104,21 @@ class Style
             $this->formats
         );
 
+        $this->resetStyle();
         $str = $this->colorize($str, $attrs);
 
         return $line ? $str."\n" : $str;
     }
 
+    /**
+     * Colorize the string.
+     *
+     * @param string $str
+     * @param array  $attrs
+     * @param bool   $end
+     *
+     * @return string
+     */
     protected function colorize($str, $attrs, $end = true)
     {
         $start = $this->start($attrs);
@@ -127,13 +132,25 @@ class Style
         return $start.$str;
     }
 
-    protected function start($attrs)
+    /**
+     * Get the string that begins the style.
+     *
+     * @param array $attrs
+     *
+     * @return string
+     */
+    protected function start(array $attrs)
     {
         $attrs = $this->buildAttrs($attrs);
 
         return $this->escSequence($attrs);
     }
 
+    /**
+     * Get the string that ends the style.
+     *
+     * @return string
+     */
     protected function end()
     {
         return $this->escSequence(0);
@@ -163,14 +180,22 @@ class Style
         return implode(';', $attrs);
     }
 
+    /**
+     * @param string $name
+     *
+     * @throws StyleNotFoundException
+     *
+     * @return bool
+     */
     public function styleWasCalled($name)
     {
         if (strcmp(substr($name, -10), 'background') === 0) {
             $background = substr($name, 0, -11);
-            $background = $this->searchBackground($background);
-            $this->background = $background;
+            if ($background = $this->searchBackground($background)) {
+                $this->background = $background;
 
-            return true;
+                return true;
+            }
         } else {
             if ($foreground = $this->searchForeground($name)) {
                 $this->foreground = $foreground;
@@ -185,24 +210,56 @@ class Style
             }
         }
 
-        return false;
+        throw new StyleNotFoundException("Invalid style {$name}.");
     }
 
+    /**
+     * Reset current style.
+     */
+    protected function resetStyle()
+    {
+        $this->foreground = null;
+        $this->background = null;
+        $this->formats = [];
+    }
+
+    /**
+     * @param string $color
+     *
+     * @return string
+     */
     protected function searchForeground($color)
     {
         return $this->searchStyle($color, $this->defaultForeground);
     }
 
+    /**
+     * @param string $color
+     *
+     * @return string
+     */
     protected function searchBackground($color)
     {
         return $this->searchStyle($color, $this->defaultBackground);
     }
 
+    /**
+     * @param string $format
+     *
+     * @return string
+     */
     protected function searchFormat($format)
     {
         return $this->searchStyle($format, $this->defaultFormat);
     }
 
+    /**
+     * @param string     $name
+     * @param array      $styles
+     * @param mixed|null $default
+     *
+     * @return mixed
+     */
     protected function searchStyle($name, $styles, $default = null)
     {
         if (array_key_exists($name, $styles)) {
