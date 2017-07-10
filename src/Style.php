@@ -7,14 +7,14 @@ class Style
     /**
      * The current foreground color.
      *
-     * @var int|array
+     * @var array
      */
     protected $foreground = [];
 
     /**
      * The current background color.
      *
-     * @var int|array
+     * @var array
      */
     protected $background = [];
 
