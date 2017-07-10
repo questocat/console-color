@@ -2,7 +2,7 @@
 
 namespace Emanci\ConsoleColor;
 
-/**
+/*
  * @method mixed default()
  * @method mixed black()
  * @method mixed red()
@@ -44,6 +44,10 @@ namespace Emanci\ConsoleColor;
  * @method mixed invert()
  * @method mixed hidden()
  */
+
+define('FOREGROUND', 38);
+define('BACKGROUND', 48);
+
 class ConsoleColor
 {
     /**
@@ -80,6 +84,19 @@ class ConsoleColor
     }
 
     /**
+     * @param int $code
+     * @param int $option
+     *
+     * @return string
+     */
+    public function color256($code = 0, $option = null)
+    {
+        $this->style->color256($code, $option);
+
+        return $this;
+    }
+
+    /**
      * Convert a string to snake case.
      *
      * @param string $value
@@ -95,6 +112,47 @@ class ConsoleColor
         }
 
         return $value;
+    }
+
+    /**
+     * Add a color to the foreground colors.
+     *
+     * @param string|array $color
+     * @param int|null     $code
+     */
+    public function addColor($color, $code = null)
+    {
+        $colors = $this->parseColor($color, $code);
+        $this->style->addColor($colors);
+
+        return $this;
+    }
+
+    /**
+     * Add a color to the background colors.
+     *
+     * @param string|array $color
+     * @param int|null     $code
+     */
+    public function addBackground($color, $code = null)
+    {
+        $colors = $this->parseColor($color, $code);
+        $this->style->addBackground($colors);
+
+        return $this;
+    }
+
+    /**
+     * Parse the color.
+     *
+     * @param string $color
+     * @param int    $code
+     *
+     * @return array
+     */
+    protected function parseColor($color, $code)
+    {
+        return is_array($color) ? $color : [$color => $code];
     }
 
     /**

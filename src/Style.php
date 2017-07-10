@@ -7,16 +7,16 @@ class Style
     /**
      * The current foreground color.
      *
-     * @var int
+     * @var int|array
      */
-    protected $foreground;
+    protected $foreground = [];
 
     /**
      * The current background color.
      *
-     * @var int
+     * @var int|array
      */
-    protected $background;
+    protected $background = [];
 
     /**
      * The current format style.
@@ -26,7 +26,7 @@ class Style
     protected $formats = [];
 
     /**
-     * The default foreground color.
+     * The default foreground colors.
      *
      * @var array
      */
@@ -51,7 +51,7 @@ class Style
     ];
 
     /**
-     * The default background color.
+     * The default background colors.
      *
      * @var array
      */
@@ -76,11 +76,11 @@ class Style
     ];
 
     /**
-     * The default format.
+     * The default formats.
      *
      * @var array
      */
-    protected $defaultFormat = [
+    protected $defaultFormats = [
         'bold' => 1,
         'dim' => 2,
         'underline' => 4,
@@ -88,6 +88,9 @@ class Style
         'invert' => 7,
         'hidden' => 8,
     ];
+
+    const COLORS_256_FOREGROUND = 38;
+    const COLORS_256_BACKGROUND = 48;
 
     /**
      * Apply the string.
@@ -175,8 +178,6 @@ class Style
      */
     protected function buildAttrs(array $attrs)
     {
-        sort($attrs);
-
         return implode(';', $attrs);
     }
 
@@ -211,6 +212,26 @@ class Style
         }
 
         throw new StyleNotFoundException("Invalid style {$name}.");
+    }
+
+    /**
+     * @param int $code
+     * @param int $option
+     *
+     * @return string
+     */
+    public function color256($code, $option = null)
+    {
+        $option = $option ? $option : self::COLORS_256_FOREGROUND;
+        $attrs = [$option, 5, $code];
+
+        if ($option == self::COLORS_256_FOREGROUND) {
+            $this->foreground = $attrs;
+        } elseif ($option == self::COLORS_256_BACKGROUND) {
+            $this->background = $attrs;
+        }
+
+        return $this;
     }
 
     /**
@@ -250,7 +271,7 @@ class Style
      */
     protected function searchFormat($format)
     {
-        return $this->searchStyle($format, $this->defaultFormat);
+        return $this->searchStyle($format, $this->defaultFormats);
     }
 
     /**
@@ -267,5 +288,31 @@ class Style
         }
 
         return $default;
+    }
+
+    /**
+     * Add colors to the foreground colors.
+     *
+     * @param array $color
+     */
+    public function addColor(array $colors)
+    {
+        $mergeColors = array_merge($this->defaultForeground, $colors);
+        $this->defaultForeground = $mergeColors;
+
+        return $this;
+    }
+
+    /**
+     * Add colors to the background colors.
+     *
+     * @param array $color
+     */
+    public function addBackground(array $colors)
+    {
+        $mergeColors = array_merge($this->defaultBackground, $colors);
+        $this->defaultBackground = $mergeColors;
+
+        return $this;
     }
 }
