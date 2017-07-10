@@ -89,7 +89,7 @@ class ConsoleColor
      *
      * @return string
      */
-    public function color256($code = 0, $option = null)
+    public function color256($code, $option = null)
     {
         $this->style->color256($code, $option);
 
