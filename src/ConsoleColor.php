@@ -72,11 +72,12 @@ class ConsoleColor
     protected $formats = [];
 
     /**
-     * The default foreground colors.
+     * The default colors.
      *
      * @var array
      */
-    protected $defaultForeground = [
+    protected $colors = [
+        // foreground
         'default' => 39,
         'black' => 30,
         'red' => 31,
@@ -94,31 +95,24 @@ class ConsoleColor
         'light_magenta' => 95,
         'light_cyan' => 96,
         'white' => 97,
-    ];
-
-    /**
-     * The default background colors.
-     *
-     * @var array
-     */
-    protected $defaultBackground = [
-        'default' => 49,
-        'black' => 40,
-        'red' => 41,
-        'green' => 42,
-        'yellow' => 43,
-        'blue' => 44,
-        'magenta' => 45,
-        'cyan' => 46,
-        'light_gray' => 47,
-        'dark_gray' => 100,
-        'light_red' => 101,
-        'light_green' => 102,
-        'light_yellow' => 103,
-        'light_blue' => 104,
-        'light_magenta' => 105,
-        'light_cyan' => 106,
-        'white' => 107,
+        // background
+        'default_background' => 49,
+        'black_background' => 40,
+        'red_background' => 41,
+        'green_background' => 42,
+        'yellow_background' => 43,
+        'blue_background' => 44,
+        'magenta_background' => 45,
+        'cyan_background' => 46,
+        'light_gray_background' => 47,
+        'dark_gray_background' => 100,
+        'light_red_background' => 101,
+        'light_green_background' => 102,
+        'light_yellow_background' => 103,
+        'light_blue_background' => 104,
+        'light_magenta_background' => 105,
+        'light_cyan_background' => 106,
+        'white_background' => 107,
     ];
 
     /**
@@ -202,24 +196,21 @@ class ConsoleColor
     {
         $name = $this->snakeCase($name);
 
-        if (strcmp(substr($name, -10), 'background') === 0) {
-            $background = substr($name, 0, -11);
-            if ($background = $this->searchBackground($background)) {
-                $this->background = $background;
-
-                return true;
+        if ($code = $this->searchColors($name)) {
+            if (strcmp(substr($name, -10), 'background') === 0) {
+                $this->background = $code;
+            } else {
+                $this->foreground = $code;
             }
-        } else {
-            if ($foreground = $this->searchForeground($name)) {
-                $this->foreground = $foreground;
+
+            return true;
+        }
+
+        if ($format = $this->searchFormat($name)) {
+            if (!array_key_exists($name, $this->formats)) {
+                $this->formats[] = $format;
 
                 return true;
-            } elseif ($format = $this->searchFormat($name)) {
-                if (!array_key_exists($name, $this->formats)) {
-                    $this->formats[] = $format;
-
-                    return true;
-                }
             }
         }
 
@@ -305,9 +296,7 @@ class ConsoleColor
         $start = $this->start($attrs);
 
         if ($end) {
-            $end = $this->end();
-
-            return $start.$str.$end;
+            return $start.$str.$this->end();
         }
 
         return $start.$str;
@@ -374,19 +363,9 @@ class ConsoleColor
      *
      * @return string
      */
-    protected function searchForeground($color)
+    protected function searchColors($color)
     {
-        return $this->searchStyle($color, $this->defaultForeground);
-    }
-
-    /**
-     * @param string $color
-     *
-     * @return string
-     */
-    protected function searchBackground($color)
-    {
-        return $this->searchStyle($color, $this->defaultBackground);
+        return $this->searchStyle($color, $this->colors);
     }
 
     /**
@@ -416,7 +395,7 @@ class ConsoleColor
     }
 
     /**
-     * Add colors to the foreground colors.
+     * Add color to the colors.
      *
      * @param string $color
      * @param int    $code
@@ -424,23 +403,8 @@ class ConsoleColor
     public function addColor($color, $code = null)
     {
         $colors = $this->parseColor($color, $code);
-        $mergeColors = array_merge($this->defaultForeground, $colors);
-        $this->defaultForeground = $mergeColors;
-
-        return $this;
-    }
-
-    /**
-     * Add colors to the background colors.
-     *
-     * @param string $color
-     * @param int    $code
-     */
-    public function addBackground($color, $code = null)
-    {
-        $colors = $this->parseColor($color, $code);
-        $mergeColors = array_merge($this->defaultBackground, $colors);
-        $this->defaultBackground = $mergeColors;
+        $mergeColors = array_merge($this->colors, $colors);
+        $this->colors = $mergeColors;
 
         return $this;
     }
@@ -511,7 +475,15 @@ class ConsoleColor
      */
     protected function parseColor($color, $code)
     {
-        return is_array($color) ? $color : [$color => $code];
+        $colors = is_array($color) ? $color : [$color => $code];
+        $return = [];
+
+        array_walk($colors, function ($code, $color) use (&$return) {
+            $color = $this->snakeCase($color);
+            $return[$color] = $code;
+        });
+
+        return $return;
     }
 
     /**
