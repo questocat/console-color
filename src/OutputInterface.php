@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of ConsoleColor.
+ * This file is part of Console Color.
  *
  * (c) emanci <zhengchaopu@gmail.com>
  *
