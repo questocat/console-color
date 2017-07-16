@@ -197,9 +197,9 @@ class ConsoleColor
         $option = $option ? $option : self::COLORS_256_FOREGROUND;
         $attrs = [$option, 5, $code];
 
-        if ($option == self::COLORS_256_FOREGROUND) {
+        if ($option === self::COLORS_256_FOREGROUND) {
             $this->foreground = $attrs;
-        } elseif ($option == self::COLORS_256_BACKGROUND) {
+        } elseif ($option === self::COLORS_256_BACKGROUND) {
             $this->background = $attrs;
         }
 
@@ -228,7 +228,7 @@ class ConsoleColor
         }
 
         if ($format = $this->searchFormat($name)) {
-            if (!in_array($format, $this->formats)) {
+            if (!in_array($format, $this->formats, true)) {
                 $this->formats[] = $format;
             }
 
