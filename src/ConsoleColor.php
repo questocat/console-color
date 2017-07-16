@@ -2,6 +2,8 @@
 
 namespace Emanci\ConsoleColor;
 
+use InvalidArgumentException;
+
 /*
  * @method mixed default()
  * @method mixed black()
@@ -39,7 +41,7 @@ namespace Emanci\ConsoleColor;
  * @method mixed whiteBackground()
  * @method mixed bold()
  * @method mixed dim()
- * @method mixed underline()
+ * @method mixed undernewline()
  * @method mixed blink()
  * @method mixed invert()
  * @method mixed hidden()
@@ -72,12 +74,18 @@ class ConsoleColor
     protected $formats = [];
 
     /**
+     * The output instance.
+     *
+     * @var OutputInterface
+     */
+    protected $output;
+
+    /**
      * The default colors.
      *
      * @var array
      */
     protected $colors = [
-        // foreground
         'default' => 39,
         'black' => 30,
         'red' => 31,
@@ -95,7 +103,6 @@ class ConsoleColor
         'light_magenta' => 95,
         'light_cyan' => 96,
         'white' => 97,
-        // background
         'default_background' => 49,
         'black_background' => 40,
         'red_background' => 41,
@@ -145,6 +152,18 @@ class ConsoleColor
     const COLORS_256_BACKGROUND = 48;
 
     /**
+     * ConsoleColor construct.
+     *
+     * @param OutputInterface|null $output
+     */
+    public function __construct(OutputInterface $output = null)
+    {
+        if ($output) {
+            $this->output = $output;
+        }
+    }
+
+    /**
      * @param string $method
      * @param array  $args
      *
@@ -165,12 +184,14 @@ class ConsoleColor
      * @param int $code
      * @param int $option
      *
+     * @throws InvalidArgumentException
+     *
      * @return string
      */
     public function color256($code, $option = null)
     {
         if (!$this->isSupportedColors256()) {
-            return $this->warning('No supported colors 256.');
+            throw new InvalidArgumentException('No supported colors 256.');
         }
 
         $option = $option ? $option : self::COLORS_256_FOREGROUND;
@@ -207,14 +228,14 @@ class ConsoleColor
         }
 
         if ($format = $this->searchFormat($name)) {
-            if (!array_key_exists($name, $this->formats)) {
+            if (!in_array($format, $this->formats)) {
                 $this->formats[] = $format;
-
-                return true;
             }
+
+            return true;
         }
 
-        return $this->error("Invalid style {$name}.");
+        throw new StyleNotFoundException("Invalid style {$name}.");
     }
 
     /**
@@ -239,11 +260,11 @@ class ConsoleColor
      * Returns colorized string.
      *
      * @param string $str
-     * @param bool   $line
+     * @param bool   $newline
      *
      * @return string
      */
-    public function render($str = null, $line = true)
+    public function render($str = null, $newline = true)
     {
         $attrs = array_merge(
             (array) $this->foreground,
@@ -251,19 +272,47 @@ class ConsoleColor
             $this->formats
         );
 
-        return $this->out($str, $attrs, $line);
+        return $this->out($str, $attrs, $newline);
     }
 
     /**
-     * @param string $str
+     * Set the output.
+     *
+     * @param OutputInterface $output
+     */
+    public function setOutput(OutputInterface $output)
+    {
+        $this->output = $output;
+
+        return $this;
+    }
+
+    /**
+     * Returns the output instance.
+     *
+     * @return OutputInterface
+     */
+    public function getOutput()
+    {
+        if (is_null($this->output)) {
+            $this->output = new StdOut();
+        }
+
+        return $this->output;
+    }
+
+    /**
+     * @param string $content
      * @param array  $attrs
-     * @param bool   $line
+     * @param bool   $newline
      *
      * @return string
      */
-    protected function out($str, array $attrs, $line = true)
+    protected function out($content, array $attrs, $newline = true)
     {
-        return fwrite(STDERR, $this->applyStyle($str, $attrs, $line));
+        $content = $this->applyStyle($content, $attrs);
+
+        return $this->getOutput()->write($content, $newline);
     }
 
     /**
@@ -274,12 +323,11 @@ class ConsoleColor
      *
      * @return string
      */
-    protected function applyStyle($str, array $attrs, $line)
+    protected function applyStyle($str, array $attrs)
     {
         $this->resetStyle();
-        $str = $this->colorize($str, $attrs);
 
-        return $line ? $str."\n" : $str;
+        return $this->colorize($str, $attrs);
     }
 
     /**
@@ -287,19 +335,14 @@ class ConsoleColor
      *
      * @param string $str
      * @param array  $attrs
-     * @param bool   $end
      *
      * @return string
      */
-    protected function colorize($str, $attrs, $end = true)
+    protected function colorize($str, $attrs)
     {
         $start = $this->start($attrs);
 
-        if ($end) {
-            return $start.$str.$this->end();
-        }
-
-        return $start.$str;
+        return $start.$str.$this->end();
     }
 
     /**
