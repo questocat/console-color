@@ -68,14 +68,14 @@ class ConsoleColor
      *
      * @var array
      */
-    protected $foreground = [];
+    protected $foreground;
 
     /**
      * The current background color.
      *
      * @var array
      */
-    protected $background = [];
+    protected $background;
 
     /**
      * The current format style.
@@ -175,7 +175,7 @@ class ConsoleColor
      * @param string $method
      * @param array  $args
      *
-     * @return $this
+     * @return string|$this
      */
     public function __call($method, $args)
     {
@@ -269,6 +269,8 @@ class ConsoleColor
      * Set the output.
      *
      * @param OutputInterface $output
+     *
+     * @return $this
      */
     public function setOutput(OutputInterface $output)
     {
