@@ -33,7 +33,7 @@ class ConsoleColorTest extends TestCase
 
             return $content;
         });
-        $this->consoleColor = new ConsoleColor($this->output);
+        $this->consoleColor = new ConsoleColorWithSupportedColor256($this->output);
         $this->consoleColor->setOutput($this->output);
         $this->withoutSupportedColor256 = new ConsoleColorWithoutSupportedColor256($this->output);
         $this->newConsoleColor = new ConsoleColor();
@@ -105,6 +105,14 @@ class ConsoleColorTest extends TestCase
     {
         $this->newConsoleColor->blue('蓝色字体');
         $this->newConsoleColor->blue()->render('蓝色字体');
+    }
+}
+
+class ConsoleColorWithSupportedColor256 extends ConsoleColor
+{
+    protected function isSupportedColors256()
+    {
+        return true;
     }
 }
 
