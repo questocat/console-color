@@ -226,24 +226,49 @@ class ConsoleColor
         $name = $this->snakeCase($name);
 
         if ($code = $this->searchColors($name)) {
-            if (0 === strcmp(substr($name, -10), 'background')) {
-                $this->background = $code;
-            } else {
-                $this->foreground = $code;
-            }
+            $this->setColor($name, $code);
 
             return true;
         }
 
-        if ($format = $this->searchFormat($name)) {
-            if (!in_array($format, $this->formats, true)) {
-                $this->formats[] = $format;
-            }
+        if ($formatCode = $this->searchFormat($name)) {
+            $this->setFormat($formatCode);
 
             return true;
         }
 
         throw new StyleNotFoundException("Invalid style {$name}.");
+    }
+
+    /**
+     * @param string $style
+     * @param int    $code
+     *
+     * @return $this
+     */
+    protected function setColor($style, $code)
+    {
+        if (0 === strcmp(substr($style, -10), 'background')) {
+            $this->background = $code;
+        } else {
+            $this->foreground = $code;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param int $formatCode
+     *
+     * @return $this
+     */
+    protected function setFormat($formatCode)
+    {
+        if (!in_array($formatCode, $this->formats, true)) {
+            $this->formats[] = $formatCode;
+        }
+
+        return $this;
     }
 
     /**
