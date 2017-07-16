@@ -40,9 +40,9 @@ $consoleColor->foo('自定义颜色字体，含多个属性');
 $consoleColor->foo()->bar('自定义颜色字体，含多个属性');
 
 // 支持 88/256 Colors
-$consoleColor->color256(12)->render('8/256 字体');             // foreground color
-$consoleColor->color256(12, FOREGROUND)->render('8/256 字体'); // foreground color
-$consoleColor->color256(25, BACKGROUND)->render('8/256 背景'); // background color
+$consoleColor->color256(12)->render('8/256 字体');             // 字体颜色
+$consoleColor->color256(12, FOREGROUND)->render('8/256 字体'); // 字体颜色
+$consoleColor->color256(25, BACKGROUND)->render('8/256 背景'); // 背景颜色
 
 // 组合渲染
 $consoleColor->blueBackground()->red('蓝色背景，红色字体');
