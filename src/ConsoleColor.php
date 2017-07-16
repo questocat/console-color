@@ -66,14 +66,14 @@ class ConsoleColor
     /**
      * The current foreground color.
      *
-     * @var array
+     * @var mixed
      */
     protected $foreground;
 
     /**
      * The current background color.
      *
-     * @var array
+     * @var mixed
      */
     protected $background;
 
