@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of ConsoleColor.
+ *
+ * (c) emanci <zhengchaopu@gmail.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Emanci\ConsoleColor;
 
 use InvalidArgumentException;
@@ -52,6 +61,8 @@ define('BACKGROUND', 48);
 
 class ConsoleColor
 {
+    const COLORS_256_FOREGROUND = 38;
+    const COLORS_256_BACKGROUND = 48;
     /**
      * The current foreground color.
      *
@@ -148,9 +159,6 @@ class ConsoleColor
         'success' => [38, 5, 40],
     ];
 
-    const COLORS_256_FOREGROUND = 38;
-    const COLORS_256_BACKGROUND = 48;
-
     /**
      * ConsoleColor construct.
      *
@@ -239,24 +247,6 @@ class ConsoleColor
     }
 
     /**
-     * Convert a string to snake case.
-     *
-     * @param string $value
-     * @param string $delimiter
-     *
-     * @return string
-     */
-    protected function snakeCase($value, $delimiter = '_')
-    {
-        if (!ctype_lower($value)) {
-            $value = preg_replace('/\s+/u', '', $value);
-            $value = strtolower(preg_replace('/(.)(?=[A-Z])/u', '$1'.$delimiter, $value));
-        }
-
-        return $value;
-    }
-
-    /**
      * Returns colorized string.
      *
      * @param string $str
@@ -299,6 +289,95 @@ class ConsoleColor
         }
 
         return $this->output;
+    }
+
+    /**
+     * Add color to the colors.
+     *
+     * @param string $color
+     * @param int    $code
+     */
+    public function addColor($color, $code = null)
+    {
+        $colors = $this->parseColor($color, $code);
+        $mergeColors = array_merge($this->colors, $colors);
+        $this->colors = $mergeColors;
+
+        return $this;
+    }
+
+    /**
+     * Output info message.
+     *
+     * @param string $msg
+     *
+     * @return string
+     */
+    public function info($msg)
+    {
+        $infoTheme = $this->defaultThemes['info'];
+
+        return $this->out($msg, $infoTheme);
+    }
+
+    /**
+     * Output warning message.
+     *
+     * @param string $msg
+     *
+     * @return string
+     */
+    public function warning($msg)
+    {
+        $warningTheme = $this->defaultThemes['warning'];
+
+        return $this->out($msg, $warningTheme);
+    }
+
+    /**
+     * Output error message.
+     *
+     * @param string $msg
+     *
+     * @return string
+     */
+    public function error($msg)
+    {
+        $errorTheme = $this->defaultThemes['error'];
+
+        return $this->out($msg, $errorTheme);
+    }
+
+    /**
+     * Output success message.
+     *
+     * @param string $msg
+     *
+     * @return string
+     */
+    public function success($msg)
+    {
+        $successTheme = $this->defaultThemes['success'];
+
+        return $this->out($msg, $successTheme);
+    }
+
+    /**
+     * Convert a string to snake case.
+     *
+     * @param string $value
+     * @param string $delimiter
+     *
+     * @return string
+     */
+    protected function snakeCase($value, $delimiter = '_')
+    {
+        if (!ctype_lower($value)) {
+            $value = preg_replace('/\s+/u', '', $value);
+            $value = strtolower(preg_replace('/(.)(?=[A-Z])/u', '$1'.$delimiter, $value));
+        }
+
+        return $value;
     }
 
     /**
@@ -435,77 +514,6 @@ class ConsoleColor
         }
 
         return $default;
-    }
-
-    /**
-     * Add color to the colors.
-     *
-     * @param string $color
-     * @param int    $code
-     */
-    public function addColor($color, $code = null)
-    {
-        $colors = $this->parseColor($color, $code);
-        $mergeColors = array_merge($this->colors, $colors);
-        $this->colors = $mergeColors;
-
-        return $this;
-    }
-
-    /**
-     * Output info message.
-     *
-     * @param string $msg
-     *
-     * @return string
-     */
-    public function info($msg)
-    {
-        $infoTheme = $this->defaultThemes['info'];
-
-        return $this->out($msg, $infoTheme);
-    }
-
-    /**
-     * Output warning message.
-     *
-     * @param string $msg
-     *
-     * @return string
-     */
-    public function warning($msg)
-    {
-        $warningTheme = $this->defaultThemes['warning'];
-
-        return $this->out($msg, $warningTheme);
-    }
-
-    /**
-     * Output error message.
-     *
-     * @param string $msg
-     *
-     * @return string
-     */
-    public function error($msg)
-    {
-        $errorTheme = $this->defaultThemes['error'];
-
-        return $this->out($msg, $errorTheme);
-    }
-
-    /**
-     * Output success message.
-     *
-     * @param string $msg
-     *
-     * @return string
-     */
-    public function success($msg)
-    {
-        $successTheme = $this->defaultThemes['success'];
-
-        return $this->out($msg, $successTheme);
     }
 
     /**
