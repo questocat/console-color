@@ -63,6 +63,7 @@ class ConsoleColor
 {
     const COLORS_256_FOREGROUND = 38;
     const COLORS_256_BACKGROUND = 48;
+
     /**
      * The current foreground color.
      *
