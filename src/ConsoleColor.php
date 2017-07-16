@@ -195,15 +195,14 @@ class ConsoleColor
      *
      * @throws InvalidArgumentException
      *
-     * @return string
+     * @return $this
      */
-    public function color256($code, $option = null)
+    public function color256($code, $option = self::COLORS_256_FOREGROUND)
     {
         if (!$this->isSupportedColors256()) {
             throw new InvalidArgumentException('No supported colors 256.');
         }
 
-        $option = $option ? $option : self::COLORS_256_FOREGROUND;
         $attrs = [$option, 5, $code];
 
         if ($option === self::COLORS_256_FOREGROUND) {
@@ -227,7 +226,7 @@ class ConsoleColor
         $name = $this->snakeCase($name);
 
         if ($code = $this->searchColors($name)) {
-            if (strcmp(substr($name, -10), 'background') === 0) {
+            if (0 === strcmp(substr($name, -10), 'background')) {
                 $this->background = $code;
             } else {
                 $this->foreground = $code;
