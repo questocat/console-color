@@ -167,9 +167,7 @@ class ConsoleColor
      */
     public function __construct(OutputInterface $output = null)
     {
-        if ($output) {
-            $this->output = $output;
-        }
+        $this->output = $output;
     }
 
     /**

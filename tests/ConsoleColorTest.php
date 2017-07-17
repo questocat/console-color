@@ -106,6 +106,11 @@ class ConsoleColorTest extends TestCase
         $this->newConsoleColor->blue('蓝色字体');
         $this->newConsoleColor->blue()->render('蓝色字体');
     }
+
+    public function testIsSupportedColors256()
+    {
+        $this->newConsoleColor->color256(18)->render('8/256 字体');
+    }
 }
 
 class ConsoleColorWithSupportedColor256 extends ConsoleColor
