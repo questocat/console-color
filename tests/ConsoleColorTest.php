@@ -21,8 +21,6 @@ class ConsoleColorTest extends TestCase
 
     protected $withoutSupportedColor256;
 
-    protected $newConsoleColor;
-
     public function setUp()
     {
         $this->output = m::mock(OutputInterface::class);
@@ -36,7 +34,6 @@ class ConsoleColorTest extends TestCase
         $this->consoleColor = new ConsoleColorWithSupportedColor256($this->output);
         $this->consoleColor->setOutput($this->output);
         $this->withoutSupportedColor256 = new ConsoleColorWithoutSupportedColor256($this->output);
-        $this->newConsoleColor = new ConsoleColor();
     }
 
     public function testColor256()
@@ -103,13 +100,8 @@ class ConsoleColorTest extends TestCase
 
     public function testBlueForeground()
     {
-        $this->newConsoleColor->blue('蓝色字体');
-        $this->newConsoleColor->blue()->render('蓝色字体');
-    }
-
-    public function testIsSupportedColors256()
-    {
-        $this->newConsoleColor->color256(18)->render('8/256 字体');
+        $this->withoutSupportedColor256->blue('蓝色字体');
+        $this->withoutSupportedColor256->blue()->render('蓝色字体');
     }
 }
 
@@ -123,8 +115,9 @@ class ConsoleColorWithSupportedColor256 extends ConsoleColor
 
 class ConsoleColorWithoutSupportedColor256 extends ConsoleColor
 {
-    protected function isSupportedColors256()
+    public function __construct(OutputInterface $output = null)
     {
-        return false;
+        parent::__construct();
+        putenv("TERM=''");
     }
 }
