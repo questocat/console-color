@@ -117,7 +117,7 @@ class ConsoleColorWithoutSupportedColor256 extends ConsoleColor
 {
     public function __construct(OutputInterface $output = null)
     {
-        parent::__construct();
+        parent::__construct($output);
         putenv("TERM=''");
     }
 }
