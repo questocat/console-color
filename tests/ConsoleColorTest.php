@@ -33,7 +33,7 @@ class ConsoleColorTest extends TestCase
         });
         $this->consoleColor = new ConsoleColorWithSupportedColor256($this->output);
         $this->consoleColor->setOutput($this->output);
-        $this->withoutSupportedColor256 = new ConsoleColorWithoutSupportedColor256($this->output);
+        $this->withoutSupportedColor256 = new ConsoleColorWithoutSupportedColor256();
     }
 
     public function testColor256()
