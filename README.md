@@ -7,6 +7,14 @@ A simple command line colorize library
 [![Code Coverage](https://scrutinizer-ci.com/g/emanci/console-color/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/emanci/console-color/?branch=master)
 [![Packagist](https://img.shields.io/packagist/l/doctrine/orm.svg)](https://packagist.org/packages/emanci/console-color)
 
+## Installation
+
+Using [Composer](https://getcomposer.org) to add the package to your project's dependencies:
+
+```php
+composer require emanci/console-color
+```
+
 ## Usage
 
 ```php
@@ -63,25 +71,25 @@ Example will output
 
 #### Colors/Formats Api
 
-| Foreground    | Background              | Formats     |
-|---------------|-------------------------|-------------|
-| default       | defaultBackground       | bold
-| black         | blackBackground         | dim
-| red           | redBackground           | underline
-| green         | greenBackground         | blink
-| yellow        | yellowBackground        | invert
-| blue          | blueBackground          | hidden
-| magenta       | magentaBackground       |
-| cyan          | cyanBackground          |
-| lightGray     | lightGrayBackground     |
-| darkGray      | darkGrayBackground      |
-| lightRed      | lightRedBackground      |
-| lightGreen    | lightGreenBackground    |
-| lightYellow   | lightYellowBackground   |
-| lightBlue     | lightBlueBackground     |
-| lightMagenta  | lightMagentaBackground  |
-| lightCyan     | lightCyanBackground     |
-| white         | whiteBackground         |
+| Foreground    | Background              | Formats    |  Themes    |
+|---------------|-------------------------|------------|------------|
+| default       | defaultBackground       | bold       | info       |
+| black         | blackBackground         | dim        | warning    |
+| red           | redBackground           | underline  | error      |
+| green         | greenBackground         | blink      | success    |
+| yellow        | yellowBackground        | invert     |            |
+| blue          | blueBackground          | hidden     |            |
+| magenta       | magentaBackground       |            |            |
+| cyan          | cyanBackground          |            |            |
+| lightGray     | lightGrayBackground     |            |            |
+| darkGray      | darkGrayBackground      |            |            |
+| lightRed      | lightRedBackground      |            |            |
+| lightGreen    | lightGreenBackground    |            |            |
+| lightYellow   | lightYellowBackground   |            |            |
+| lightBlue     | lightBlueBackground     |            |            |
+| lightMagenta  | lightMagentaBackground  |            |            |
+| lightCyan     | lightCyanBackground     |            |            |
+| white         | whiteBackground         |            |            |
 
 ## Reference
 
