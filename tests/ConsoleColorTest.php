@@ -59,7 +59,7 @@ class ConsoleColorTest extends TestCase
     {
         $this->assertEquals("\e[4m带下划线的文字\e[0m".PHP_EOL, $this->consoleColor->underline('带下划线的文字'));
         $this->assertEquals("\e[4m带下划线的文字\e[0m".PHP_EOL, $this->consoleColor->underline()->render('带下划线的文字'));
-        $this->assertEquals("\e[1m粗体文字\e[0m".PHP_EOL, $this->consoleColor->bold()->bold()->render('粗体文字'));
+        $this->assertEquals("\e[1;1m粗体文字\e[0m".PHP_EOL, $this->consoleColor->bold()->bold()->render('粗体文字'));
     }
 
     public function testTheme()
