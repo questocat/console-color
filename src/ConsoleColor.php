@@ -65,25 +65,11 @@ class ConsoleColor
     const COLORS_256_BACKGROUND = 48;
 
     /**
-     * The current foreground color.
-     *
-     * @var mixed
-     */
-    protected $foreground;
-
-    /**
-     * The current background color.
-     *
-     * @var mixed
-     */
-    protected $background;
-
-    /**
-     * The current format style.
+     * The current style.
      *
      * @var array
      */
-    protected $formats = [];
+    protected $current = [];
 
     /**
      * The output instance.
@@ -188,6 +174,27 @@ class ConsoleColor
     }
 
     /**
+     * @param string $name
+     *
+     * @throws StyleNotFoundException
+     *
+     * @return bool
+     */
+    public function styleWasCalled($name)
+    {
+        $name = $this->snakeCase($name);
+        $supportedStyles = $this->getSupportedStyles();
+
+        if ($code = $this->searchStyle($name, $supportedStyles)) {
+            $this->mergeStyle($code);
+
+            return true;
+        }
+
+        throw new StyleNotFoundException("Invalid style {$name}.");
+    }
+
+    /**
      * @param int $code
      * @param int $option
      *
@@ -202,69 +209,36 @@ class ConsoleColor
         }
 
         $attrs = [$option, 5, $code];
-
-        if ($option === self::COLORS_256_FOREGROUND) {
-            $this->foreground = $attrs;
-        } elseif ($option === self::COLORS_256_BACKGROUND) {
-            $this->background = $attrs;
-        }
+        $this->mergeStyle($attrs);
 
         return $this;
     }
 
     /**
-     * @param string $name
+     * Get the supported styles.
      *
-     * @throws StyleNotFoundException
-     *
-     * @return bool
+     * @return array
      */
-    public function styleWasCalled($name)
+    protected function getSupportedStyles()
     {
-        $name = $this->snakeCase($name);
-
-        if ($code = $this->searchColors($name)) {
-            $this->setColor($name, $code);
-
-            return true;
-        }
-
-        if ($formatCode = $this->searchFormat($name)) {
-            $this->setFormat($formatCode);
-
-            return true;
-        }
-
-        throw new StyleNotFoundException("Invalid style {$name}.");
+        return array_merge(
+            $this->colors,
+            $this->defaultFormats,
+            $this->defaultThemes
+        );
     }
 
     /**
-     * @param string $style
-     * @param int    $code
+     * Merge the current style.
+     *
+     * @param mixed $code
      *
      * @return $this
      */
-    protected function setColor($style, $code)
+    protected function mergeStyle($code)
     {
-        if (0 === strcmp(substr($style, -10), 'background')) {
-            $this->background = $code;
-        } else {
-            $this->foreground = $code;
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param int $formatCode
-     *
-     * @return $this
-     */
-    protected function setFormat($formatCode)
-    {
-        if (!in_array($formatCode, $this->formats, true)) {
-            $this->formats[] = $formatCode;
-        }
+        $code = is_array($code) ? $code : [$code];
+        $this->current = array_merge($this->current, $code);
 
         return $this;
     }
@@ -279,13 +253,7 @@ class ConsoleColor
      */
     public function render($str = null, $newline = true)
     {
-        $attrs = array_merge(
-            (array) $this->foreground,
-            (array) $this->background,
-            $this->formats
-        );
-
-        return $this->out($str, $attrs, $newline);
+        return $this->out($str, $newline);
     }
 
     /**
@@ -332,62 +300,6 @@ class ConsoleColor
     }
 
     /**
-     * Output info message.
-     *
-     * @param string $msg
-     *
-     * @return string
-     */
-    public function info($msg)
-    {
-        $infoTheme = $this->defaultThemes['info'];
-
-        return $this->out($msg, $infoTheme);
-    }
-
-    /**
-     * Output warning message.
-     *
-     * @param string $msg
-     *
-     * @return string
-     */
-    public function warning($msg)
-    {
-        $warningTheme = $this->defaultThemes['warning'];
-
-        return $this->out($msg, $warningTheme);
-    }
-
-    /**
-     * Output error message.
-     *
-     * @param string $msg
-     *
-     * @return string
-     */
-    public function error($msg)
-    {
-        $errorTheme = $this->defaultThemes['error'];
-
-        return $this->out($msg, $errorTheme);
-    }
-
-    /**
-     * Output success message.
-     *
-     * @param string $msg
-     *
-     * @return string
-     */
-    public function success($msg)
-    {
-        $successTheme = $this->defaultThemes['success'];
-
-        return $this->out($msg, $successTheme);
-    }
-
-    /**
      * Convert a string to snake case.
      *
      * @param string $value
@@ -407,14 +319,13 @@ class ConsoleColor
 
     /**
      * @param string $content
-     * @param array  $attrs
      * @param bool   $newline
      *
      * @return string
      */
-    protected function out($content, array $attrs, $newline = true)
+    protected function out($content, $newline = true)
     {
-        $content = $this->applyStyle($content, $attrs);
+        $content = $this->applyStyle($content, $this->current);
 
         return $this->getOutput()->write($content, $newline);
     }
@@ -432,6 +343,18 @@ class ConsoleColor
         $this->resetStyle();
 
         return $this->colorize($str, $attrs);
+    }
+
+    /**
+     * Reset current style.
+     *
+     * @return $this
+     */
+    protected function resetStyle()
+    {
+        $this->current = [];
+
+        return $this;
     }
 
     /**
@@ -493,36 +416,6 @@ class ConsoleColor
     protected function buildAttrs(array $attrs)
     {
         return implode(';', $attrs);
-    }
-
-    /**
-     * Reset current style.
-     */
-    protected function resetStyle()
-    {
-        $this->foreground = null;
-        $this->background = null;
-        $this->formats = [];
-    }
-
-    /**
-     * @param string $color
-     *
-     * @return string
-     */
-    protected function searchColors($color)
-    {
-        return $this->searchStyle($color, $this->colors);
-    }
-
-    /**
-     * @param string $format
-     *
-     * @return string
-     */
-    protected function searchFormat($format)
-    {
-        return $this->searchStyle($format, $this->defaultFormats);
     }
 
     /**
