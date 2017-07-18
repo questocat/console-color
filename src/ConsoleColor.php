@@ -186,7 +186,7 @@ class ConsoleColor
         $supportedStyles = $this->getSupportedStyles();
 
         if ($code = $this->searchStyle($name, $supportedStyles)) {
-            $this->mergeStyle($code);
+            $this->mergeToCurrent($code);
 
             return true;
         }
@@ -209,7 +209,7 @@ class ConsoleColor
         }
 
         $attrs = [$option, 5, $code];
-        $this->mergeStyle($attrs);
+        $this->mergeToCurrent($attrs);
 
         return $this;
     }
@@ -235,7 +235,7 @@ class ConsoleColor
      *
      * @return $this
      */
-    protected function mergeStyle($code)
+    protected function mergeToCurrent($code)
     {
         $code = is_array($code) ? $code : [$code];
         $this->current = array_merge($this->current, $code);
@@ -292,9 +292,8 @@ class ConsoleColor
      */
     public function addColor($color, $code = null)
     {
-        $colors = $this->parseColor($color, $code);
-        $mergeColors = array_merge($this->colors, $colors);
-        $this->colors = $mergeColors;
+        $newColors = $this->parseColor($color, $code);
+        $this->colors = array_merge($this->colors, $newColors);
 
         return $this;
     }
@@ -340,9 +339,7 @@ class ConsoleColor
      */
     protected function applyStyle($str, array $attrs)
     {
-        $this->resetStyle();
-
-        return $this->colorize($str, $attrs);
+        return $this->resetStyle()->colorize($str, $attrs);
     }
 
     /**
