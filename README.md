@@ -5,6 +5,7 @@ A simple command line colorize library
 [![StyleCI](https://styleci.io/repos/96324734/shield?branch=master)](https://styleci.io/repos/96324734)
 [![Build Status](https://scrutinizer-ci.com/g/emanci/console-color/badges/build.png?b=master)](https://scrutinizer-ci.com/g/emanci/console-color/build-status/master)
 [![Code Coverage](https://scrutinizer-ci.com/g/emanci/console-color/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/emanci/console-color/?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/emanci/console-color/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/emanci/console-color/?branch=master)
 [![Packagist](https://img.shields.io/packagist/l/doctrine/orm.svg)](https://packagist.org/packages/emanci/console-color)
 
 ## Installation
