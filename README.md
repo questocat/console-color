@@ -12,7 +12,7 @@ A simple command line colorize library
 
 Using [Composer](https://getcomposer.org) to add the package to your project's dependencies:
 
-```php
+```bash
 composer require emanci/console-color
 ```
 
