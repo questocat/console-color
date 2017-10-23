@@ -1,6 +1,6 @@
 {
     "name": "emanci/console-color",
-    "description": "",
+    "description": "A simple command line colorize library",
     "keywords": ["console", "color", "console-color", "bash", "cli"],
     "license": "MIT",
     "minimum-stability": "dev",
