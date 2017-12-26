@@ -215,35 +215,6 @@ class ConsoleColor
     }
 
     /**
-     * Get the supported styles.
-     *
-     * @return array
-     */
-    protected function getSupportedStyles()
-    {
-        return array_merge(
-            $this->colors,
-            $this->defaultFormats,
-            $this->defaultThemes
-        );
-    }
-
-    /**
-     * Merge the current style.
-     *
-     * @param mixed $code
-     *
-     * @return $this
-     */
-    protected function mergeToCurrent($code)
-    {
-        $code = is_array($code) ? $code : [$code];
-        $this->current = array_merge($this->current, $code);
-
-        return $this;
-    }
-
-    /**
      * Returns colorized string.
      *
      * @param string $str
@@ -293,7 +264,36 @@ class ConsoleColor
     public function addColor($color, $code = null)
     {
         $newColors = $this->parseColor($color, $code);
+
         $this->colors = array_merge($this->colors, $newColors);
+
+        return $this;
+    }
+
+    /**
+     * Get the supported styles.
+     *
+     * @return array
+     */
+    protected function getSupportedStyles()
+    {
+        return array_merge(
+            $this->colors,
+            $this->defaultFormats,
+            $this->defaultThemes
+        );
+    }
+
+    /**
+     * Merge the current style.
+     *
+     * @param mixed $code
+     *
+     * @return $this
+     */
+    protected function mergeToCurrent($code)
+    {
+        $this->current = array_merge($this->current, (array) $code);
 
         return $this;
     }
@@ -434,12 +434,12 @@ class ConsoleColor
     /**
      * Parse the color.
      *
-     * @param string $color
-     * @param int    $code
+     * @param string|array $color
+     * @param int|null     $code
      *
      * @return array
      */
-    protected function parseColor($color, $code)
+    protected function parseColor($color, $code = null)
     {
         $colors = is_array($color) ? $color : [$color => $code];
         $return = [];
