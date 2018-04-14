@@ -1,11 +1,11 @@
 {
-    "name": "emanci/console-color",
+    "name": "questocat/console-color",
     "description": "A simple command line colorize library",
     "keywords": ["console", "color", "console-color", "bash", "cli"],
     "license": "MIT",
     "minimum-stability": "dev",
     "authors": [{
-        "name": "emanci",
+        "name": "questocat",
         "email": "zhengchaopu@gmail.com"
     }],
     "require": {
@@ -17,7 +17,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Emanci\\ConsoleColor\\": "src/"
+            "Questocat\\ConsoleColor\\": "src/"
         }
     },
     "autoload-dev": {

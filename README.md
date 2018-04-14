@@ -3,17 +3,17 @@
 A simple command line colorize library
 
 [![StyleCI](https://styleci.io/repos/96324734/shield?branch=master)](https://styleci.io/repos/96324734)
-[![Build Status](https://scrutinizer-ci.com/g/emanci/console-color/badges/build.png?b=master)](https://scrutinizer-ci.com/g/emanci/console-color/build-status/master)
-[![Code Coverage](https://scrutinizer-ci.com/g/emanci/console-color/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/emanci/console-color/?branch=master)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/emanci/console-color/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/emanci/console-color/?branch=master)
-[![Packagist](https://img.shields.io/packagist/l/doctrine/orm.svg)](https://packagist.org/packages/emanci/console-color)
+[![Build Status](https://scrutinizer-ci.com/g/questocat/console-color/badges/build.png?b=master)](https://scrutinizer-ci.com/g/emanci/console-color/build-status/master)
+[![Code Coverage](https://scrutinizer-ci.com/g/questocat/console-color/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/emanci/console-color/?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/questocat/console-color/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/emanci/console-color/?branch=master)
+[![Packagist](https://img.shields.io/packagist/l/doctrine/orm.svg)](https://packagist.org/packages/questocat/console-color)
 
 ## Installation
 
 Using [Composer](https://getcomposer.org) to add the package to your project's dependencies:
 
 ```bash
-composer require emanci/console-color
+composer require questocat/console-color
 ```
 
 ## Usage
@@ -68,7 +68,7 @@ $consoleColor->red()->color256(60, BACKGROUND)->render('8/256 背景，红色字
 
 Example will output
 
-<img src="https://github.com/emanci/console-color/blob/master/colors.png" width = "260" alt="example-output" align=center />
+<img src="https://github.com/questocat/console-color/blob/master/colors.png" width = "260" alt="example-output" align=center />
 
 #### Colors/Formats Api
 
@@ -100,4 +100,4 @@ Example will output
 
 ## License
 
-Licensed under the [MIT license](https://github.com/emanci/console-color/blob/master/LICENSE).
+Licensed under the [MIT license](https://github.com/questocat/console-color/blob/master/LICENSE).
