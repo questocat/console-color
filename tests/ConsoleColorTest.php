@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of Console Color.
+ * This file is part of questocat/console-color package.
  *
- * (c) emanci <zhengchaopu@gmail.com>
+ * (c) questocat <zhengchaopu@gmail.com>
  *
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
@@ -11,8 +11,8 @@
 
 namespace Tests;
 
-use Emanci\ConsoleColor\ConsoleColor;
-use Emanci\ConsoleColor\OutputInterface;
+use Questocat\ConsoleColor\ConsoleColor;
+use Questocat\ConsoleColor\OutputInterface;
 use Mockery as m;
 
 class ConsoleColorTest extends TestCase
@@ -23,16 +23,17 @@ class ConsoleColorTest extends TestCase
 
     public function setUp()
     {
-        $this->output = m::mock(OutputInterface::class);
-        $this->output->shouldReceive('write')->once()->andReturnUsing(function ($content, $newline = true) {
+        $output = m::mock(OutputInterface::class);
+
+        $output->shouldReceive('write')->once()->andReturnUsing(function ($content, $newline = true) {
             if ($newline) {
                 $content .= PHP_EOL;
             }
 
             return $content;
         });
-        $this->consoleColor = new ConsoleColorWithSupportedColor256($this->output);
-        $this->consoleColor->setOutput($this->output);
+        $this->consoleColor = new ConsoleColorWithSupportedColor256($output);
+        $this->consoleColor->setOutput($output);
         $this->withoutSupportedColor256 = new ConsoleColorWithoutSupportedColor256();
     }
 
@@ -84,7 +85,7 @@ class ConsoleColorTest extends TestCase
     }
 
     /**
-     * @expectedException        \Emanci\ConsoleColor\StyleNotFoundException
+     * @expectedException        \Questocat\ConsoleColor\StyleNotFoundException
      * @expectedExceptionMessage Invalid style unknow.
      */
     public function testStyleNotFoundException()
@@ -118,6 +119,7 @@ class ConsoleColorWithoutSupportedColor256 extends ConsoleColor
     public function __construct(OutputInterface $output = null)
     {
         parent::__construct($output);
+
         putenv("TERM=''");
     }
 }
