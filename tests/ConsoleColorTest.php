@@ -11,9 +11,9 @@
 
 namespace Tests;
 
+use Mockery as m;
 use Questocat\ConsoleColor\ConsoleColor;
 use Questocat\ConsoleColor\OutputInterface;
-use Mockery as m;
 
 class ConsoleColorTest extends TestCase
 {
